@@ -4,16 +4,16 @@ export function getArticles(){
     return Http.get('api/articles');
 }
 
-export function getUserArticles(id){
-    return Http.get(`api/articles?id=${id}`);
+export function getUserArticles(){
+    return Http.get(`api/articles/user`);
 }
 
 export function addArticle(data){
-    return Http.post('api/articles/add', data);
+    return Http.post('api/articles/new', data);
 }
 
 export function editArticle(id, data){
-    return Http.put(`api/articles/edit?id=${id}`, data);
+    return Http.put(`api/articles/${id}`, data);
 }
 
 export function login(data){
@@ -21,9 +21,9 @@ export function login(data){
 }
 
 export function register(data){
-    return Http.post('api/auth/new', data);
+    return Http.post('api/auth/createUser', data);
 }
 
 export function editUserDetails(data){
-    return Http.put('api/auth', data);
+    return Http.put('api/auth/updateUser', data);
 }
