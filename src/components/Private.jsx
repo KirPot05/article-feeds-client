@@ -3,10 +3,13 @@ import Login from './Login';
 
 function Private({children}) {
 
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
 
+        if(localStorage.getItem('auth-token')){
+            setIsAuthenticated(true);
+        }
 
     }, [])
 

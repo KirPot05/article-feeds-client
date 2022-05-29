@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { register } from '../services';
 
 function Login() {
 
+	const navigate = useNavigate();
 	const [credentials, setCredentials] = useState({
 		firstName: "",
 		lastName: "",
@@ -13,7 +15,9 @@ function Login() {
 		confirmPassword: ""
 	});
 
-	const [preferences, setPreferences] = useState([]);
+	const [sports, setSports] = useState(false);
+	const [politics, setPolitics] = useState(false);
+	const [technology, setTechnology] = useState(false);
 
 	const handleInput = (e) => {
 		setCredentials({
@@ -21,30 +25,41 @@ function Login() {
 		})
 	}
 
-	const handlePreferences = (e) => {
 
-		if (e.target.checked) {
-			switch (e.target.name) {
-				case "Sports":
-					setPreferences([...preferences, "Sports"])
-					break;
-
-				case "Politics":
-					setPreferences([...preferences, "Politics"])
-					break;
-
-				case "Technology":
-					setPreferences([...preferences, "Technology"])
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-
-	const handleLogin = (e) => {
+	const handleRegister = async (e) => {
 		e.preventDefault();
+
+		const {password, confirmPassword} = credentials;
+
+		if(password !== confirmPassword){
+			return;
+		}
+
+		const preferences = [];
+
+		if(sports)	preferences.push("Sports")
+		if(politics)	preferences.push("Politics")
+		if(technology)	preferences.push("Technology")
+
+		const req = {
+			firstName: credentials.firstName,
+			lastName: credentials.lastName,
+			phone: credentials.phone, 
+			email: credentials.email,
+			password: credentials.password,
+			birthDate: new Date(credentials.date),
+			preferences: preferences
+		}
+
+		const {data} = await register(req);
+		console.log(data)
+		if(data.success){
+			console.log(data.message);
+			localStorage.setItem('auth-token', data.response);
+			navigate('/');
+		} 
+
+
 	}
 
 	return (
@@ -62,7 +77,7 @@ function Login() {
 
 				<h2 className='text-3xl font-bold px-4 mb-4'>Register</h2>
 
-				<form className='flex flex-col space-y-1 px-5' onSubmit={handleLogin}>
+				<form className='flex flex-col space-y-1 px-5' onSubmit={handleRegister}>
 					<div className='flex flex-col my-2'>
 						<label htmlFor="firstName">First Name</label>
 						<input className='px-2 py-1 ' type="text" value={credentials.firstName} name="firstName" onChange={handleInput} />
@@ -75,7 +90,7 @@ function Login() {
 
 					<div className='flex flex-col my-2'>
 						<label htmlFor="phone">Contact Number</label>
-						<input className='px-2 py-1 ' type="tel" name="phone" value={credentials.phone} onChange={handleInput} />
+						<input className='px-2 py-1 ' type="tel" minLength={10} maxLength={10} name="phone" value={credentials.phone} onChange={handleInput} />
 					</div>
 
 					<div className='flex flex-col my-2'>
@@ -101,17 +116,17 @@ function Login() {
 					<div className='flex items-center space-x-4 my-2'>
 						<div className='flex items-center space-x-1'>
 							<label htmlFor="Sports">Sports</label>
-							<input className='p-1' type="checkbox" name='Sports' onChange={handlePreferences} />
+							<input className='p-1' type="checkbox" name='sports' value={sports} onChange={() => setSports(state => !state.sports)} />
 						</div>
 
 						<div className='flex items-center space-x-1'>
 							<label htmlFor="Politics">Politics</label>
-							<input className='p-1' type="checkbox" name='Politics' onChange={handlePreferences} />
+							<input className='p-1' type="checkbox" name='politics' value={politics} onChange={() => setPolitics(state => !state.politics)} />
 						</div>
 
 						<div className='flex items-center space-x-1'>
 							<label htmlFor="Technology">Technology</label>
-							<input className='p-1' type="checkbox" name="Technology" onChange={handlePreferences} />
+							<input className='p-1' type="checkbox" name="technology" value={technology} onChange={() => setTechnology(state => !state.technology)} />
 						</div>
 					</div>
 

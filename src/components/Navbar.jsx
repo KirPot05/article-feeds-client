@@ -14,7 +14,11 @@ function Navbar() {
         });
 
         return () => {window.removeEventListener('scroll', () => {})};
-    }, [])
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth-token');
+    }
 
     return (
         <div className={`fixed top-0 z-10 w-full flex items-center justify-between flex-wrap flex-col space-y-5 md:space-y-0 md:flex-row py-4 px-6 bg-white ${y > 0 && "shadow-lg"}`}>
@@ -41,7 +45,8 @@ function Navbar() {
             <div className='flex items-center flex-col md:flex-row md:space-x-6 font-bold'>
                 <Link to="/" className='p-2 hover:bg-gray-300 hover:rounded-md'>Home</Link>
                 <Link to="/user" className='p-2 bg-black text-white rounded-md hover:bg-gray-300 hover:text-black'>Your Articles</Link>
-                <Link to="/login" className='p-2 hover:bg-gray-300 hover:rounded-md'>
+                <Link to="/add" className='p-2 bg-black text-white rounded-md hover:bg-gray-300 hover:text-black'>Add Articles</Link>
+                <Link to="/login" className='p-2 hover:bg-gray-300 hover:rounded-md' onClick={handleLogout}>
                     Logout
                 </Link>
             </div>

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { openArticle, selectArticle } from "../features/articleSlice";
 
 
-function ArticleCard() {
+function ArticleCard({title, description, category, id}) {
 
     const truncate = (text) => {
         return text.slice(0, 120) + "...";
@@ -14,8 +14,9 @@ function ArticleCard() {
 
     const openArticleDialog = () => {
         dispatch(selectArticle({
-            title: "Title",
-            description: "Lorem ipsum, dolor sit amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprstit amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?it amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?it amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?e eaque?",
+            id: id,
+            title: title,
+            description: description,
             imgUrl: "https://st2.depositphotos.com/2026267/5233/i/950/depositphotos_52334423-stock-photo-news-article-on-digital-tablet.jpg"
         }));
 
@@ -36,9 +37,9 @@ function ArticleCard() {
                 </div>
 
                 <div className="mt-5">
-                    <h3 className="font-bold text-xl mb-2">TitleTitleTitleTitleTitle</h3>
-                    <p className="text-lg">{truncate("Lorem ipsum, dolor sit amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprstit amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?it amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?it amet conit. Ipsa, rerum, excepturi modi iusto, cupiditate at corporis autem dicta totam enim molestiae reprste eaque?e eaque?")}</p>
-                    <p className="mt-5"> <span className="font-bold mr-1"> Category: </span> Sample </p>
+                    <h3 className="font-bold text-xl mb-2">{title}</h3>
+                    <p className="text-lg">{truncate(description || "")}</p>
+                    <p className="mt-5"> <span className="font-bold mr-1"> Category: </span> {category} </p>
                 </div>
 
             </div>

@@ -1,9 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { addArticle } from '../services';
 
 function AddArticle() {
 
-	const handleAddArticle = (e) => {
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [category, setCategory] = useState('');
+	const [file, setFile] = useState(null);
+
+	const handleAddArticle = async (e) => {
 		e.preventDefault();
+
+
+		try{
+			const {data} = await addArticle({
+				title, 
+				description,
+				category,
+				file
+			});
+			
+			if(data.sucess){
+				console.log(data.message)
+			}
+
+		} catch (err){
+			console.error(err)
+
+		}
+		
+
 	}
 
 	return (
@@ -12,7 +38,7 @@ function AddArticle() {
 
 			<form className='w-3/5 m-auto' onSubmit={handleAddArticle}>
 				<div className='my-5 h-60 w-full flex items-center justify-center fileContainer'>
-					<input type="file" className='cursor-pointer' name="img" />
+					<input type="file" accept="image/*" multiple={false} className='cursor-pointer' name="img" onChange={(e) => setFile(e.target.files[0])} />
 				</div>
 
 				<div className='flex flex-col my-5'>
@@ -22,6 +48,8 @@ function AddArticle() {
 						name="title" 
 						placeholder='Enter Title here' 
 						className='px-2 py-1'
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
 					/>
 				</div>
 
@@ -34,16 +62,18 @@ function AddArticle() {
 						className='px-3 py-2'
 						rows={8}
 						cols={60}
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
 					/>
 				</div>
 
 				<div className='flex flex-col my-5'>
 					<label htmlFor="description" className='text-lg font-bold'>Description</label>
-					<select className='px-2 py-1 cursor-pointer'>
+					<select className='px-2 py-1 cursor-pointer' value={category} onChange={(e) => setCategory(e.target.value)}>
 						<option value="">Select a category</option>
 						<option value="Sports">Sports</option>
-						<option value="Technology">Technology</option>
-						<option value="Politics">Politics</option>
+						<option value="Technology" >Technology</option>
+						<option value="Politics" >Politics</option>
 					</select>
 				</div>
 

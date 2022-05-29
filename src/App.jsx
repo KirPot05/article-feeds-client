@@ -9,15 +9,14 @@ import UserArticles from "./components/UserArticles";
 import Settings from "./components/Settings";
 import AddArticle from "./components/AddArticle";
 import EditArticle from "./components/EditArticle";
-// import Sidebar from "./components/Sidebar";
 
 
 
 function App() {
+
 	return (
 		<div className="app">
 			<Navbar />
-
 
 			<Routes>
 				<Route exact path="/" element={<Private><Container/></Private>}/>
@@ -28,7 +27,6 @@ function App() {
 				<Route exact path="/login" element={<Login/>}/>
 				<Route path="/register" element={<Register/>}/>
 
-				{/* <Route path="/article" element/> */}
 			</Routes>
 		</div>
 	);

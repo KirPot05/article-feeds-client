@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../services';
 
 function Login() {
 
 	const [credentials, setCredentials] = useState({ email: "", password: "" });
-
+	const navigate = useNavigate();
 
 	const handleInput = (e) => {
 		setCredentials({
@@ -13,9 +14,29 @@ function Login() {
 	}
 
 
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
+
+		
+		try{
+			const {data} = await login({
+				email: credentials.email,
+				password: credentials.password
+			});
+	
+			if(data.success){	
+				localStorage.setItem('auth-token', data.response);
+				navigate('/');
+			}
+
+		} catch(err){
+			console.error(err)
+		}
+		
+
 	}
+
+
 
 	return (
 		<div className="w-4/5 mt-20 mb-5 mx-auto py-5 flex items-center justify-center space-x-2 bg-white rounded-md" style={{height: "80vh"}}>

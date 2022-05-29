@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { editArticle } from '../services';
 
-function AddArticle() {
+function EditArticle() {
 
 	const { id } = useParams();
-
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [category, setCategory] = useState('');
 
-	const handleAddArticle = (e) => {
+
+	const handleAddArticle = async (e) => {
 		e.preventDefault();
+
+		try {
+			const { data } = await editArticle(id, {
+				title,
+				description,
+				category
+			})
+
+			if (data.success) {
+
+				setTitle("")
+				setDescription("")
+				setCategory("")
+			}
+		} catch (e) {
+			console.error(e);
+		}
+
 	}
 
 	return (
@@ -18,9 +37,6 @@ function AddArticle() {
 			<h1 className='text-5xl font-bold my-5 text-center'>Edit article</h1>
 
 			<form className='w-3/5 m-auto' onSubmit={handleAddArticle}>
-				<div className='mx-auto my-5 h-60 bg-gray-500'>
-
-				</div>
 
 				<div className='flex flex-col my-5'>
 					<label htmlFor="title" className='text-lg font-bold'>Title</label>
@@ -29,6 +45,8 @@ function AddArticle() {
 						name="title"
 						placeholder='Enter Title here'
 						className='px-2 py-1'
+						value={title}
+						onChange={e => setTitle(e.target.value)}
 					/>
 				</div>
 
@@ -41,12 +59,15 @@ function AddArticle() {
 						className='px-3 py-2'
 						rows={8}
 						cols={60}
+						value={description}
+						onChange={e => setDescription(e.target.value)}
 					/>
 				</div>
 
 				<div className='flex flex-col my-5'>
-					<label htmlFor="description" className='text-lg font-bold'>Description</label>
-					<select className='px-2 py-1 cursor-pointer'>
+					<label htmlFor="description" className='text-lg font-bold'>Category</label>
+					<select className='px-2 py-1 cursor-pointer' value={category}
+						onChange={e => setCategory(e.target.value)}>
 						<option value="Select a category">Select a category</option>
 						<option value="Sports">Sports</option>
 						<option value="Technology">Technology</option>
@@ -68,4 +89,4 @@ function AddArticle() {
 	)
 }
 
-export default AddArticle
+export default EditArticle
